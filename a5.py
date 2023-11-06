@@ -57,8 +57,10 @@ class Board:
     def __str__(self) -> str:
         """String representation of the board"""
         row_str = ""
+        row_num = 0
         for r in self.rows:
-            row_str += f"{r}\n"
+            row_str += f"row {row_num}: {r}\n\n"
+            row_num += 1
 
         return f"num_nums_placed: {self.num_nums_placed}\nboard (rows): \n{row_str}"
 
@@ -106,7 +108,8 @@ class Board:
         Returns:
             a tuple of row, column index identifying the most constrained cell
         """
-        pass
+        i=self.rows
+        #pass
 
     def failure_test(self) -> bool:
         """Check if we've failed to correctly fill out the puzzle. If we find a cell
@@ -125,7 +128,8 @@ class Board:
         Returns:
             True if we've placed all numbers, False otherwise
         """
-        pass
+        return self.num_nums_placed == self.size * self.size
+        #pass
 
     def update(self, row: int, column: int, assignment: int) -> None:
         """Assigns the given value to the cell given by passed in row and column
@@ -139,7 +143,18 @@ class Board:
             column - index of the column to assign
             assignment - value to place at given row, column coordinate
         """
-        pass
+        self.rows[row][column] = assignment
+        self.num_nums_placed += 1
+
+        for i in range(self.size):
+            remove_if_exists(self.rows[row][i], assignment)
+            remove_if_exists(self.rows[i][column], assignment)
+
+        for i, j in self.subgrid_coordinates(row,column):
+            remove_if_exists(self.rows[i][j], assignment)
+            #print(i, j)
+        #print(self.subgrid_coordinates(row,column))
+        #pass
 
 
 def DFS(state: Board) -> Board:
@@ -174,7 +189,16 @@ def BFS(state: Board) -> Board:
 
 if __name__ == "__main__":
     # uncomment the below lines once you've implemented the board class
-   
+
+    b = Board()
+    print(b)
+    b.print_pretty()
+    b.update(0, 0, 4)
+    b.update(2, 1, 7)
+    b.update(0, 5, 3)
+    b.update(7, 1, 9)
+    b.print_pretty()
+    print(b)
     # # CODE BELOW HERE RUNS YOUR BFS/DFS
     # print("<<<<<<<<<<<<<< Solving Sudoku >>>>>>>>>>>>>>")
 
