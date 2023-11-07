@@ -108,7 +108,18 @@ class Board:
         Returns:
             a tuple of row, column index identifying the most constrained cell
         """
-        i=self.rows
+        row = 0
+        col = 0
+        mini = self.size
+        for i in range(self.size):
+            for j in range(self.size):
+                #print(self.rows[i][j])
+                if isinstance(self.rows[i][j], list) and len(self.rows[i][j]) < mini:
+                    mini = len(self.rows[i][j])
+                    row = i
+                    col = j
+                    #print(self.rows[i][j])
+        return (row, col)
         #pass
 
     def failure_test(self) -> bool:
@@ -119,7 +130,12 @@ class Board:
         Returns:
             True if we have failed to fill out the puzzle, False otherwise
         """
-        pass
+        for row in self.rows:
+            for col in row:
+                if col == []:
+                    return True
+            return False
+        #pass
 
     def goal_test(self) -> bool:
         """Check if we've completed the puzzle (if we've placed all the numbers).
@@ -190,15 +206,15 @@ def BFS(state: Board) -> Board:
 if __name__ == "__main__":
     # uncomment the below lines once you've implemented the board class
 
-    b = Board()
-    print(b)
-    b.print_pretty()
-    b.update(0, 0, 4)
-    b.update(2, 1, 7)
-    b.update(0, 5, 3)
-    b.update(7, 1, 9)
-    b.print_pretty()
-    print(b)
+    #b = Board()
+    #print(b)
+    #b.print_pretty()
+    #b.update(0, 0, 4)
+    #b.update(2, 1, 7)
+    #b.update(0, 5, 3)
+    #b.update(7, 1, 9)
+    #b.print_pretty()
+    #print(b)
     # # CODE BELOW HERE RUNS YOUR BFS/DFS
     # print("<<<<<<<<<<<<<< Solving Sudoku >>>>>>>>>>>>>>")
 
@@ -218,66 +234,66 @@ if __name__ == "__main__":
     #     solution.print_pretty()
 
     # # sets of moves for the different games
-    # first_moves = [
-    #     (0, 1, 7),
-    #     (0, 7, 1),
-    #     (1, 2, 9),
-    #     (1, 3, 7),
-    #     (1, 5, 4),
-    #     (1, 6, 2),
-    #     (2, 2, 8),
-    #     (2, 3, 9),
-    #     (2, 6, 3),
-    #     (3, 1, 4),
-    #     (3, 2, 3),
-    #     (3, 4, 6),
-    #     (4, 1, 9),
-    #     (4, 3, 1),
-    #     (4, 5, 8),
-    #     (4, 7, 7),
-    #     (5, 4, 2),
-    #     (5, 6, 1),
-    #     (5, 7, 5),
-    #     (6, 2, 4),
-    #     (6, 5, 5),
-    #     (6, 6, 7),
-    #     (7, 2, 7),
-    #     (7, 3, 4),
-    #     (7, 5, 1),
-    #     (7, 6, 9),
-    #     (8, 1, 3),
-    #     (8, 7, 8),
-    # ]
+    first_moves = [
+         (0, 1, 7),
+         (0, 7, 1),
+         (1, 2, 9),
+         (1, 3, 7),
+         (1, 5, 4),
+         (1, 6, 2),
+         (2, 2, 8),
+         (2, 3, 9),
+         (2, 6, 3),
+         (3, 1, 4),
+         (3, 2, 3),
+         (3, 4, 6),
+         (4, 1, 9),
+         (4, 3, 1),
+         (4, 5, 8),
+         (4, 7, 7),
+         (5, 4, 2),
+         (5, 6, 1),
+         (5, 7, 5),
+         (6, 2, 4),
+         (6, 5, 5),
+         (6, 6, 7),
+         (7, 2, 7),
+         (7, 3, 4),
+         (7, 5, 1),
+         (7, 6, 9),
+         (8, 1, 3),
+         (8, 7, 8),
+    ]
 
-    # second_moves = [
-    #     (0, 1, 2),
-    #     (0, 3, 3),
-    #     (0, 5, 5),
-    #     (0, 7, 4),
-    #     (1, 6, 9),
-    #     (2, 1, 7),
-    #     (2, 4, 4),
-    #     (2, 7, 8),
-    #     (3, 0, 1),
-    #     (3, 2, 7),
-    #     (3, 5, 9),
-    #     (3, 8, 2),
-    #     (4, 1, 9),
-    #     (4, 4, 3),
-    #     (4, 7, 6),
-    #     (5, 0, 6),
-    #     (5, 3, 7),
-    #     (5, 6, 5),
-    #     (5, 8, 8),
-    #     (6, 1, 1),
-    #     (6, 4, 9),
-    #     (6, 7, 2),
-    #     (7, 2, 6),
-    #     (8, 1, 4),
-    #     (8, 3, 8),
-    #     (8, 5, 7),
-    #     (8, 7, 5),
-    # ]
+    second_moves = [
+        (0, 1, 2),
+        (0, 3, 3),
+        (0, 5, 5),
+        (0, 7, 4),
+        (1, 6, 9),
+        (2, 1, 7),
+        (2, 4, 4),
+        (2, 7, 8),
+        (3, 0, 1),
+        (3, 2, 7),
+        (3, 5, 9),
+        (3, 8, 2),
+        (4, 1, 9),
+        (4, 4, 3),
+        (4, 7, 6),
+        (5, 0, 6),
+        (5, 3, 7),
+        (5, 6, 5),
+        (5, 8, 8),
+        (6, 1, 1),
+        (6, 4, 9),
+        (6, 7, 2),
+        (7, 2, 6),
+        (8, 1, 4),
+        (8, 3, 8),
+        (8, 5, 7),
+        (8, 7, 5),
+    ]
     # #Create a sudoku board.
     # b = Board()
     # #Place the 28 assignments in first_moves on the board.
@@ -314,11 +330,16 @@ if __name__ == "__main__":
 
     # ##Now, let's write some quick tests to check update!
     # #Create a sudoku board.
-    # g = Board()
+    g = Board()
     # #Place the 28 assignments in first_moves on the board.
-    # for trip in first_moves:
-    #     g.update(trip[0],trip[1],trip[2])
-    # g.print_pretty()
+    for trip in first_moves:
+        g.update(trip[0],trip[1],trip[2])
+    g.print_pretty()
+    print(g)
+    g.rows[5][3] = []
+    print(g.find_most_constrained_cell())
+    print(g.failure_test())
+
     # #From the above print statement, you can see which numbers
     # #  have been assigned to the board, and then create test
     # #  cases by looking at the board and listing what values are
