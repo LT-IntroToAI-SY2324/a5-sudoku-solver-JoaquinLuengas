@@ -224,7 +224,21 @@ def BFS(state: Board) -> Board:
     Returns:
         either None in the case of invalid input or a solved board
     """
-    pass
+    the_queue = Queue()
+    the_queue.push(state)
+    while not the_queue.is_empty():
+        curr = the_queue.pop()
+        if curr.goal_test():
+            return curr
+        elif not curr.failure_test():
+            row, col = curr.find_most_constrained_cell()
+            for sel in curr.rows[row][col]:
+                # Make a copy of the board
+                cpy = copy.deepcopy(curr)
+                cpy.update(row, col, sel)
+                the_queue.push(cpy)
+    return None
+    #pass
 
 
 if __name__ == "__main__":
@@ -364,7 +378,8 @@ if __name__ == "__main__":
     #g.rows[5][3] = []
     #print(g.find_most_constrained_cell())
     #print(g.failure_test())
-    sol = DFS(g)
+    #sol = DFS(g)
+    sol = BFS(g)
     print(sol)
     sol.print_pretty
     # #From the above print statement, you can see which numbers
