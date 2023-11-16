@@ -132,7 +132,7 @@ class Board:
         """
         for row in self.rows:
             for col in row:
-                if not col == []:
+                if not col:
                     return True
         return False
         #pass
@@ -165,8 +165,8 @@ class Board:
         for i in range(self.size):
             remove_if_exists(self.rows[row][i], assignment)
             remove_if_exists(self.rows[i][column], assignment)
-
-        for i, j in self.subgrid_coordinates(row,column):
+        
+        for i, j in self.subgrid_coordinates(row, column):
             remove_if_exists(self.rows[i][j], assignment)
             #print(i, j)
         #print(self.subgrid_coordinates(row,column))
@@ -185,12 +185,13 @@ def DFS(state: Board) -> Board:
     Returns:
         either None in the case of invalid input or a solved board
     """
-    the_stack = Stack()
-    the_stack.push(state)
+    the_stack = Stack([state])
     count = 0
     while not the_stack.is_empty():
+        # print(the_stack)
         curr = the_stack.pop()
         count += 1
+        # print(curr)
         if curr.goal_test():
             print(f"It took {count} iterations to solve")
             return curr
@@ -198,9 +199,9 @@ def DFS(state: Board) -> Board:
             row, col = curr.find_most_constrained_cell()
             mcc = curr.rows[row][col]
             for sel in mcc:
-                # Make a copy of the board
-                cpy = copy.deepcopy(curr)
+                cpy = copy.deepcopy(curr) 
                 cpy.update(row, col, sel)
+                # print(row, col, sel)
                 the_stack.push(cpy)
     return None
             #sel = curr.rows[row[col]]
@@ -238,10 +239,11 @@ def BFS(state: Board) -> Board:
             return curr
         elif not curr.failure_test():
             row, col = curr.find_most_constrained_cell()
-            for sel in curr.rows[row][col]:
-                # Make a copy of the board
-                cpy = copy.deepcopy(curr)
+            mcc = curr.rows[row][col]
+            for sel in mcc:
+                cpy = copy.deepcopy(curr) 
                 cpy.update(row, col, sel)
+                # print(row, col, sel)
                 the_queue.push(cpy)
     return None
     #pass
@@ -273,6 +275,7 @@ if __name__ == "__main__":
         b.print_pretty()
         # solve board
         solution = (DFS if use_dfs else BFS)(b)
+        #print(solution)
         # print solved board
         print("<<<<< Solved Board >>>>>")
         solution.print_pretty()
@@ -376,7 +379,7 @@ if __name__ == "__main__":
 
     # ##Now, let's write some quick tests to check update!
     # #Create a sudoku board.
-    #g = Board()
+    # g = Board()
     # #Place the 28 assignments in first_moves on the board.
     # for trip in first_moves:
     #     g.update(trip[0],trip[1],trip[2])
@@ -389,11 +392,11 @@ if __name__ == "__main__":
     # sol = BFS(g)
     # print(sol)
     # sol.print_pretty
-    # #From the above print statement, you can see which numbers
-    # #  have been assigned to the board, and then create test
-    # #  cases by looking at the board and listing what values are
-    # #  still possible for a specific cell. I have created
-    # #  2 such test cases like that for you. 
+    #From the above print statement, you can see which numbers
+    #  have been assigned to the board, and then create test
+    #  cases by looking at the board and listing what values are
+    #  still possible for a specific cell. I have created
+    #  2 such test cases like that for you. 
     # assert g.rows[0][2] == [2,5,6], "update test 1"
     # assert g.rows[5][5] == [3,7,9], "update test 2"
     # assert g.num_nums_placed == 28, "update test 3"
